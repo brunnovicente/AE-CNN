@@ -32,11 +32,8 @@ camada1 = Dense(units=128, activation='relu')(flatten)
 camada_saida = Dense(units=10, activation='softmax')(camada1)
 
 cnn = Model(camada_entrada, camada_saida)
-cnn.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
+cnn.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 cnn.summary()
 relatorio = cnn.fit(X_train, to_categorical(y_train), batch_size=512, epochs=30, 
         shuffle=True,
         validation_data=(X_test, to_categorical(y_test)))
-
-
-print('Teste')
