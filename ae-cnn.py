@@ -15,8 +15,8 @@ from sklearn.metrics import accuracy_score #Funções para calcular a acurácia 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 X_train = X_train.reshape((60000,28,28,1))/255
-X_test = X_test.reshape((10000,28,28,1))/255
-
+X_test = X_test.reshape((10000,28,28))/255
+ 
 #ENCODER
 inp = Input((28, 28,1))
 e = Conv2D(32, (3, 3), activation='relu')(inp)
@@ -41,3 +41,15 @@ encoder = Model(inp, l)
 ae.summary()
 ae.compile(optimizer="adam", loss="mse")
 relatorio = ae.fit(X_train, X_train, batch_size=512, epochs=30,shuffle=True)
+
+XZ = encoder.predict(X_test)
+X_rec = ae.predict(X_test).reshape(10000,28,28)
+
+plt.rcParams['figure.figsize'] = (20,5)
+fig, ax = plt.subplots(3, 10)
+plt.gray()
+for i in np.arange(10):
+    ax[0][i].imshow(X_test[i,:,:])
+    ax[1][i].imshow(XZ[i,:].reshape(7,7))
+    ax[2][i].imshow(X_rec[i,:,:])
+plt.show()
